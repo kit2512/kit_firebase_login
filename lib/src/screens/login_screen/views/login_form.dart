@@ -8,20 +8,31 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "Login",
-          style: TextStyle(fontSize: 24),
-        ),
-        const SizedBox(height: 16.0),
-        _EmailInput(),
-        const SizedBox(height: 16.0),
-        _PassowrdInput(),
-        const SizedBox(height: 16.0),
-        _LoginButton(),
-      ],
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state.formStatus.isSubmissionFailure) {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage!),
+            ),
+          );
+        }
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Login",
+            style: TextStyle(fontSize: 24),
+          ),
+          const SizedBox(height: 16.0),
+          _EmailInput(),
+          const SizedBox(height: 16.0),
+          _PassowrdInput(),
+          const SizedBox(height: 16.0),
+          _LoginButton(),
+        ],
+      ),
     );
   }
 }

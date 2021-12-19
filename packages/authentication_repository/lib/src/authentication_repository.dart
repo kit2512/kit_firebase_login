@@ -2,6 +2,7 @@ import 'package:cache/cache.dart';
 
 import 'models/models.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 
 class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -31,7 +32,7 @@ class AuthenticationRepository {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-    } on firebase_auth.FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();
@@ -42,8 +43,10 @@ class AuthenticationRepository {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-    } on firebase_auth.FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure(e.code);
+    } catch (_) {
+      throw const SignUpWithEmailAndPasswordFailure();
     }
   }
 

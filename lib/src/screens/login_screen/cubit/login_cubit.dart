@@ -31,16 +31,17 @@ class LoginCubit extends Cubit<LoginState> {
     );
   }
 
-  onLogin() {
+  onLogin() async {
     if (state.formStatus == FormzStatus.invalid) {
       return;
     }
     emit(state.copyWith(formStatus: FormzStatus.submissionInProgress));
     try {
-      authenticationRepository.logInWithEmailAndPassword(
+      await authenticationRepository.logInWithEmailAndPassword(
         state.email.value,
         state.password.value,
       );
+      emit(state.copyWith(formStatus: FormzStatus.submissionSuccess));
     } on LogInWithEmailAndPasswordFailure catch (e) {
       emit(state.copyWith(
         formStatus: FormzStatus.submissionFailure,
